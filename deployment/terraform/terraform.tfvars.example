@@ -1,0 +1,15 @@
+# ============================================================================
+# Terraform variables template
+# Copy this file to terraform.tfvars and fill in your values.
+# terraform.tfvars is gitignored — never commit real account IDs or ARNs.
+#
+# runtime_arn is optional here; deploy.sh will set it automatically
+# ============================================================================
+
+account_id  = "123456789012"          # 12-digit AWS account ID
+
+# Optional overrides (defaults shown):
+# aws_region         = "us-east-1"
+# qualifier          = "DEFAULT"
+# images_bucket_name = "my-custom-images-bucket"
+# vitallens_api_key  = "your_vitallens_api_key"

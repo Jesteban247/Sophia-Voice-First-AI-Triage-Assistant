@@ -1,0 +1,234 @@
+TASK: Analyze ID Document Photo
+
+The patient has sent a photo of their identification document. Your task is to extract patient identity information accurately and completely.
+
+LANGUAGE: Always respond in ENGLISH only, regardless of the patient's name, the document language, or their nationality. Extract data from the document in any language, but all responses must be in English.
+
+SYSTEMATIC EXTRACTION PROCESS:
+
+1. DOCUMENT IDENTIFICATION:
+   First, identify the type of document:
+   - National ID card
+   - Driver's license
+   - Passport
+   - Cédula de ciudadanía
+   - Other government-issued ID
+
+2. FIELD EXTRACTION (Extract in this order):
+
+   A. FULL NAME (nombre):
+      Look for labels:
+      - "Name" / "Nombre"
+      - "Full Name" / "Nombre Completo"
+      - "Apellidos y Nombres"
+      - "Given Names and Surname"
+      
+      Extraction rules:
+      - Include both first and last names
+      - Maintain proper capitalization
+      - Include middle names if present
+      - Keep name order as shown on document
+      - Remove any titles (Mr., Mrs., Dr.)
+      
+      Common formats:
+      - "LAST NAME, FIRST NAME MIDDLE"
+      - "FIRST NAME MIDDLE NAME LAST NAME"
+      - "APELLIDOS, NOMBRES"
+
+   B. ID/CÉDULA NUMBER (cedula):
+      Look for labels:
+      - "ID" / "ID Number"
+      - "Cédula" / "CC"
+      - "Document Number" / "No."
+      - "License Number"
+      - "Passport Number"
+      
+      Extraction rules:
+      - Extract ALL digits
+      - Remove spaces, dashes, and special characters
+      - Store as continuous number string
+      - Include leading zeros if present
+      - Verify number is complete (not cut off)
+      
+      Examples:
+      - "123-456-789" → "123456789"
+      - "CC 1.234.567" → "1234567"
+      - "ID: 987 654 321" → "987654321"
+
+   C. DATE OF BIRTH (dob):
+      Look for labels:
+      - "Date of Birth" / "DOB"
+      - "Fecha de Nacimiento"
+      - "Born" / "Nacido"
+      - "Birth Date"
+      
+      Extraction rules:
+      - Convert to format: "Month DD YYYY"
+      - Spell out month name fully
+      - Use 2-digit day with leading zero if needed
+      - Use 4-digit year
+      
+      Common input formats and conversions:
+      - "03/11/2004" → "November 3 2004" (if DD/MM/YYYY)
+      - "11/03/2004" → "November 3 2004" (if MM/DD/YYYY)
+      - "2004-11-03" → "November 3 2004" (ISO format)
+      - "3 Nov 2004" → "November 3 2004"
+      - "NOV 03 2004" → "November 3 2004"
+      
+      Month name mapping:
+      - 01/Jan/Ene → January
+      - 02/Feb → February
+      - 03/Mar → March
+      - 04/Apr/Abr → April
+      - 05/May → May
+      - 06/Jun → June
+      - 07/Jul → July
+      - 08/Aug/Ago → August
+      - 09/Sep → September
+      - 10/Oct → October
+      - 11/Nov → November
+      - 12/Dec/Dic → December
+
+   D. SEX/GENDER (sexo):
+      Look for labels:
+      - "Sex" / "Sexo"
+      - "Gender" / "Género"
+      - "M/F"
+      
+      Extraction rules:
+      - Convert to full word: "Male", "Female", or "Other"
+      - Accept variations:
+        * M / Masculino / Male → "Male"
+        * F / Femenino / Female → "Female"
+        * X / Other / Otro → "Other"
+
+3. QUALITY VALIDATION:
+
+   Before finalizing extraction, verify:
+   
+   ✓ Name completeness:
+     - Both first and last names present
+     - No obvious truncation
+     - Proper capitalization
+   
+   ✓ ID number completeness:
+     - All digits visible
+     - No partial numbers
+     - Reasonable length (typically 6-12 digits)
+   
+   ✓ Date validity:
+     - Day is 1-31
+     - Month is valid
+     - Year is reasonable (1900-2024)
+     - Person would be 0-120 years old
+   
+   ✓ Sex field:
+     - Valid value extracted
+     - Converted to standard format
+
+4. HANDLING COMMON ISSUES:
+
+   Blurry or unclear text:
+   - Extract what you can read clearly
+   - Leave unclear fields as null
+   - Will ask patient verbally for missing info
+   
+   Partial document visible:
+   - Extract visible fields only
+   - Don't guess or infer missing information
+   
+   Multiple languages on document:
+   - Use the clearest/most complete version
+   - Prefer Latin alphabet if available
+   
+   Handwritten information:
+   - Extract if clearly legible
+   - Be extra careful with accuracy
+   
+   Expired documents:
+   - Still extract information (expiration doesn't affect identity)
+   - Information is still valid for triage
+
+5. EXTRACTION CONFIDENCE:
+
+   High confidence (extract and use):
+   - Text is clear and legible
+   - Field labels are visible
+   - Information is complete
+   
+   Medium confidence (extract with caution):
+   - Some blur but readable
+   - Field labels partially visible
+   - Information appears complete
+   
+   Low confidence (leave null, ask verbally):
+   - Text is very blurry
+   - Field labels not visible
+   - Information appears incomplete
+
+6. OUTPUT INSTRUCTIONS:
+
+   After extraction:
+   
+   A. Fill all identified fields in structured output:
+      - nombre: Full name as extracted
+      - cedula: Digits only, no spaces
+      - dob: "Month DD YYYY" format
+      - sexo: "Male", "Female", or "Other"
+   
+   B. Confirm to patient what you found:
+      "Thanks, [name]. I've got your details from your ID."
+      
+      Or if some fields missing:
+      "Thanks, I was able to get [fields found] from your ID. Could you tell me your [missing field]?"
+   
+   C. Only ask verbally for fields that could not be read:
+      - If name unclear: "Could you tell me your full name?"
+      - If ID unclear: "What's your ID number?"
+      - If DOB unclear: "What's your date of birth? For example, November 3 2004."
+      - If sex unclear: "And your sex — male, female, or other?"
+
+7. EXAMPLES OF GOOD EXTRACTION:
+
+   Example 1 - Colombian Cédula:
+   Document shows:
+   - "APELLIDOS Y NOMBRES: CASTILLO BLANCO ESTEBAN"
+   - "CC: 108.787.432"
+   - "FECHA DE NACIMIENTO: 03 NOV 2004"
+   - "SEXO: M"
+   
+   Extract as:
+   - nombre: "Esteban Castillo Blanco"
+   - cedula: "108787432"
+   - dob: "November 3 2004"
+   - sexo: "Male"
+   
+   Example 2 - US Driver's License:
+   Document shows:
+   - "NAME: SMITH, JOHN MICHAEL"
+   - "DL: 123456789"
+   - "DOB: 11/03/2004"
+   - "SEX: M"
+   
+   Extract as:
+   - nombre: "John Michael Smith"
+   - cedula: "123456789"
+   - dob: "November 3 2004"
+   - sexo: "Male"
+
+8. PRIVACY AND SECURITY:
+
+   - Handle document information with care
+   - Extract only required fields
+   - Don't comment on document validity
+   - Don't mention document expiration
+   - Maintain professional, respectful tone
+
+FINAL CHECKLIST:
+✓ All visible fields extracted
+✓ Date format converted correctly
+✓ ID number has no spaces
+✓ Sex converted to full word
+✓ Name properly capitalized
+✓ Patient confirmation message prepared
+✓ Missing fields identified for verbal collection

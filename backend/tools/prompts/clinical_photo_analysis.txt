@@ -1,0 +1,146 @@
+TASK: Analyze Clinical Photo
+
+The patient has sent a photo of their {symptom} located in the {location}. Your task is to provide a detailed, objective clinical description of what you observe.
+
+LANGUAGE: Always respond in ENGLISH only, regardless of the patient's name or what language they speak.
+
+ANALYSIS FRAMEWORK:
+
+1. VISUAL CHARACTERISTICS (Describe systematically):
+
+   COLOR:
+   - Primary color (red, pink, purple, brown, yellow, white, etc.)
+   - Color intensity (bright, pale, dark)
+   - Color distribution (uniform, patchy, mottled)
+   - Surrounding skin color changes
+
+   TEXTURE & SURFACE:
+   - Surface appearance (smooth, rough, scaly, crusted)
+   - Elevation (flat, raised, depressed)
+   - Borders (well-defined, irregular, diffuse)
+   - Skin integrity (intact, broken, weeping)
+
+   SIZE & EXTENT:
+   - Approximate dimensions (small, medium, large)
+   - Distribution pattern (localized, scattered, widespread)
+   - Number of lesions if multiple
+   - Affected area size
+
+   PATTERN & MORPHOLOGY:
+   - Shape (round, oval, linear, irregular)
+   - Arrangement (clustered, grouped, isolated)
+   - Symmetry (symmetric, asymmetric)
+   - Borders (sharp, blurred, raised)
+
+2. NOTABLE CLINICAL FEATURES:
+
+   INFLAMMATION SIGNS:
+   - Redness (erythema)
+   - Swelling (edema)
+   - Warmth indicators
+   - Surrounding tissue reaction
+
+   LESION CHARACTERISTICS:
+   - Bumps/papules (raised, solid)
+   - Blisters/vesicles (fluid-filled)
+   - Pustules (pus-filled)
+   - Ulcers (open sores)
+   - Scales or crusts
+
+   INJURY INDICATORS:
+   - Breaks in skin
+   - Bleeding or dried blood
+   - Bruising (ecchymosis)
+   - Abrasions or lacerations
+
+   DISCHARGE OR FLUID:
+   - Presence of drainage
+   - Type (clear, cloudy, bloody, purulent)
+   - Amount (minimal, moderate, significant)
+
+3. CLINICAL DESCRIPTION FORMAT:
+
+   Write 2-3 clear, objective sentences describing what you see.
+   
+   Structure:
+   - Sentence 1: Primary observation (what it is, where, size)
+   - Sentence 2: Key characteristics (color, texture, pattern)
+   - Sentence 3: Notable features (inflammation, discharge, etc.)
+   
+   GOOD EXAMPLES:
+   
+   Rash:
+   "Multiple small, raised red bumps clustered together on the skin, approximately 5-7 cm in diameter. The lesions appear slightly inflamed with mild surrounding erythema. The affected area shows intact skin with no visible discharge or crusting."
+   
+   Wound:
+   "A linear laceration approximately 3 cm in length with clean, well-approximated edges. Minimal surrounding bruising is visible, with no signs of active bleeding or discharge. The wound appears recent with intact surrounding tissue."
+   
+   Swelling:
+   "Diffuse swelling across the joint area with visible skin tightness and mild redness. The affected area appears approximately 30% larger than the contralateral side. No visible breaks in skin integrity or discoloration beyond mild erythema."
+   
+   Bruise:
+   "An irregular area of ecchymosis measuring approximately 8 cm in diameter with purple-blue discoloration. The bruise shows a darker center with lighter peripheral coloring, suggesting recent trauma. Surrounding skin appears intact without swelling or abrasions."
+
+4. AVOID IN CLINICAL DESCRIPTIONS:
+
+   ❌ Diagnoses: "This is eczema", "Looks like cellulitis"
+   ❌ Subjective terms: "looks bad", "seems infected", "appears serious"
+   ❌ Speculation: "probably caused by...", "might be..."
+   ❌ Medical jargon patients won't understand in the message field
+   ❌ Alarming language: "severe", "dangerous", "concerning" (unless truly emergency)
+   ❌ Treatment suggestions: "needs antibiotics", "should see specialist"
+
+5. PATIENT COMMUNICATION:
+
+   When speaking to the patient about the photo, use the same clinical description but in conversational tone:
+   
+   Professional version (for visual_evidence field):
+   "Multiple small, raised red bumps clustered together with mild surrounding inflammation."
+   
+   Patient-friendly version (for message field):
+   "I can see a cluster of small red bumps in that area with some redness around them. [Follow-up question]"
+
+6. CONTEXT-AWARE FOLLOW-UP QUESTIONS:
+
+   Based on what you observe, ask ONE relevant follow-up:
+   
+   If you see redness/inflammation:
+   - "Does the area feel warm to the touch?"
+   - "Is it painful or just uncomfortable?"
+   
+   If you see a wound/break in skin:
+   - "Is there any discharge or bleeding?"
+   - "Have you cleaned or treated it with anything?"
+   
+   If you see swelling:
+   - "Has the swelling increased or decreased since it started?"
+   - "Is it painful when you press on it?"
+   
+   If you see bruising:
+   - "Do you remember how this happened?"
+   - "Have you noticed any other bruises?"
+   
+   If you see a rash/bumps:
+   - "Is it itchy or painful?"
+   - "Have you noticed it spreading?"
+   
+   If you see a burn:
+   - "What caused the burn?"
+   - "When did this happen?"
+
+7. QUALITY STANDARDS:
+
+   Your description should be:
+   ✓ Objective and factual
+   ✓ Medically accurate
+   ✓ Detailed but concise
+   ✓ Professional terminology
+   ✓ Useful for physician assessment
+   ✓ Free of speculation or diagnosis
+
+OUTPUT INSTRUCTIONS:
+- Store the clinical description in the visual_evidence field (professional medical terminology)
+- Communicate observation to patient naturally in the message field (patient-friendly language)
+- Ask one relevant follow-up question based on what you observed
+- Set evidence_ask=false (photo has been received and analyzed)
+- Continue with the clinical information sequence
